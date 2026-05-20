@@ -4,6 +4,7 @@ import plume/content_type_options.{type ContentTypeOptions} as cto
 import plume/cross_origin_embedder_policy.{type CrossOriginEmbedderPolicy} as coep
 import plume/cross_origin_opener_policy.{type CrossOriginOpenerPolicy} as coop
 import plume/cross_origin_resource_policy.{type CrossOriginResourcePolicy} as corp
+import plume/dns_prefetch_control.{type DnsPrefetchControl} as dpc
 import plume/origin_agent_cluster.{type OriginAgentCluster} as oac
 
 pub opaque type Config {
@@ -12,6 +13,7 @@ pub opaque type Config {
     cross_origin_embedder_policy: Option(CrossOriginEmbedderPolicy),
     cross_origin_opener_policy: Option(CrossOriginOpenerPolicy),
     cross_origin_resource_policy: Option(CrossOriginResourcePolicy),
+    dns_prefetch_control: Option(DnsPrefetchControl),
     origin_agent_cluster: Option(OriginAgentCluster),
   )
 }
@@ -22,51 +24,53 @@ pub fn default() -> Config {
     cross_origin_embedder_policy: None,
     cross_origin_opener_policy: Some(coop.SameOrigin),
     cross_origin_resource_policy: Some(corp.SameOrigin),
+    dns_prefetch_control: Some(dpc.Off),
     origin_agent_cluster: Some(oac.Enabled),
   )
 }
 
 pub fn set_headers(resp: Response(body), config: Config) -> Response(body) {
   resp
-  |> set_if_some(
+  |> set_header_if_some(
     config.content_type_options,
     "x-content-type-options",
     cto.to_string,
   )
-  |> set_if_some(
+  |> set_header_if_some(
     config.cross_origin_embedder_policy,
     "cross-origin-embedder-policy",
     coep.to_string,
   )
-  |> set_if_some(
+  |> set_header_if_some(
     config.cross_origin_opener_policy,
     "cross-origin-opener-policy",
     coop.to_string,
   )
-  |> set_if_some(
+  |> set_header_if_some(
     config.cross_origin_resource_policy,
     "cross-origin-resource-policy",
     corp.to_string,
   )
-  |> set_if_some(
+  |> set_header_if_some(
+    config.dns_prefetch_control,
+    "x-dns-prefetch-control",
+    dpc.to_string,
+  )
+  |> set_header_if_some(
     config.origin_agent_cluster,
     "origin-agent-cluster",
     oac.to_string,
   )
 }
 
-fn set_if_some(
+fn set_header_if_some(
   resp: Response(body),
   value: Option(value),
   name: String,
   render: fn(value) -> String,
 ) -> Response(body) {
   case value {
-    Some(v) ->
-      case render(v) {
-        "" -> resp
-        rendered -> response.set_header(resp, name, rendered)
-      }
+    Some(value) -> response.set_header(resp, name, render(value))
     None -> resp
   }
 }
