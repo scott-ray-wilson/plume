@@ -13,7 +13,7 @@ pub type CrossOriginResourcePolicy {
   /// Restricts reads to requests sharing the same [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin) (same scheme, host, and port). Plume default.
   SameOrigin
   /// Permits reads from any [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin). Useful when paired with
-  /// [Cross-Origin Embedded Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Cross-Origin-Embedder-Policy).
+  /// [Cross-Origin Embedder Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Cross-Origin-Embedder-Policy).
   CrossOrigin
 }
 
