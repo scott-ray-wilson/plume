@@ -8,6 +8,9 @@ import plume/dns_prefetch_control.{type DnsPrefetchControl} as dpc
 import plume/download_options.{type DownloadOptions} as do
 import plume/frame_options.{type FrameOptions} as fo
 import plume/origin_agent_cluster.{type OriginAgentCluster} as oac
+import plume/permitted_cross_domain_policies.{
+  type PermittedCrossDomainPolicies,
+} as pcdp
 import plume/xss_protection.{type XssProtection} as xp
 
 pub opaque type Config {
@@ -20,6 +23,7 @@ pub opaque type Config {
     download_options: Option(DownloadOptions),
     frame_options: Option(FrameOptions),
     origin_agent_cluster: Option(OriginAgentCluster),
+    permitted_cross_domain_policies: Option(PermittedCrossDomainPolicies),
     xss_protection: Option(XssProtection),
   )
 }
@@ -34,6 +38,7 @@ pub fn default() -> Config {
     download_options: Some(do.NoOpen),
     frame_options: Some(fo.SameOrigin),
     origin_agent_cluster: Some(oac.Enabled),
+    permitted_cross_domain_policies: Some(pcdp.None),
     xss_protection: Some(xp.Disabled),
   )
 }
@@ -75,6 +80,11 @@ pub fn set_headers(resp: Response(body), config: Config) -> Response(body) {
     config.origin_agent_cluster,
     "origin-agent-cluster",
     oac.to_string,
+  )
+  |> set_header_if_some(
+    config.permitted_cross_domain_policies,
+    "x-permitted-cross-domain-policies",
+    pcdp.to_string,
   )
   |> set_header_if_some(
     config.xss_protection,
