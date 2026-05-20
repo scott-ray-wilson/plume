@@ -16,4 +16,5 @@ pub fn plume_default_test() {
     == Ok("same-origin")
   assert response.get_header(resp, "cross-origin-resource-policy")
     == Ok("same-origin")
+  assert response.get_header(resp, "origin-agent-cluster") == Ok("?1")
 }
