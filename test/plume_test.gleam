@@ -18,5 +18,6 @@ pub fn plume_default_test() {
   assert response.get_header(resp, "cross-origin-resource-policy")
     == Ok("same-origin")
   assert response.get_header(resp, "x-dns-prefetch-control") == Ok("off")
+  assert response.get_header(resp, "x-download-options") == Ok("noopen")
   assert response.get_header(resp, "origin-agent-cluster") == Ok("?1")
 }
