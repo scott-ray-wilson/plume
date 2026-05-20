@@ -1,11 +1,13 @@
 import gleam/http/response.{type Response}
 import gleam/option.{type Option, None, Some}
 import plume/cross_origin_embedder_policy.{type CrossOriginEmbedderPolicy} as coep
+import plume/cross_origin_opener_policy.{type CrossOriginOpenerPolicy} as coop
 import plume/cross_origin_resource_policy.{type CrossOriginResourcePolicy} as corp
 
 pub opaque type Config {
   Config(
     cross_origin_embedder_policy: Option(CrossOriginEmbedderPolicy),
+    cross_origin_opener_policy: Option(CrossOriginOpenerPolicy),
     cross_origin_resource_policy: Option(CrossOriginResourcePolicy),
   )
 }
@@ -13,6 +15,7 @@ pub opaque type Config {
 pub fn default() -> Config {
   Config(
     cross_origin_embedder_policy: None,
+    cross_origin_opener_policy: Some(coop.SameOrigin),
     cross_origin_resource_policy: Some(corp.SameOrigin),
   )
 }
@@ -23,6 +26,11 @@ pub fn set_headers(resp: Response(body), config: Config) -> Response(body) {
     config.cross_origin_embedder_policy,
     "cross-origin-embedder-policy",
     coep.to_string,
+  )
+  |> set_if_some(
+    config.cross_origin_opener_policy,
+    "cross-origin-opener-policy",
+    coop.to_string,
   )
   |> set_if_some(
     config.cross_origin_resource_policy,
