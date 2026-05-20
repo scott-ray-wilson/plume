@@ -1,13 +1,16 @@
+import gleam/http/response
 import gleeunit
+import plume
 
 pub fn main() -> Nil {
   gleeunit.main()
 }
 
-// gleeunit test functions end in `_test`
-pub fn hello_world_test() {
-  let name = "Joe"
-  let greeting = "Hello, " <> name <> "!"
+pub fn plume_default_test() {
+  let config = plume.default()
 
-  assert greeting == "Hello, Joe!"
+  let resp = plume.set_headers(response.new(200), config)
+
+  assert response.get_header(resp, "cross-origin-resource-policy")
+    == Ok("same-origin")
 }
