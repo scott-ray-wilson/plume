@@ -27,8 +27,8 @@ pub type CrossOriginEmbedderPolicy {
   Credentialless
 }
 
-pub fn to_string(policy: CrossOriginEmbedderPolicy) -> String {
-  case policy {
+pub fn to_string(value: CrossOriginEmbedderPolicy) -> String {
+  case value {
     UnsafeNone -> "unsafe-none"
     RequireCorp -> "require-corp"
     Credentialless -> "credentialless"

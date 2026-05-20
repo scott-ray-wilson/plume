@@ -1,5 +1,6 @@
 import gleam/http/response.{type Response}
 import gleam/option.{type Option, None, Some}
+import plume/content_type_options.{type ContentTypeOptions} as cto
 import plume/cross_origin_embedder_policy.{type CrossOriginEmbedderPolicy} as coep
 import plume/cross_origin_opener_policy.{type CrossOriginOpenerPolicy} as coop
 import plume/cross_origin_resource_policy.{type CrossOriginResourcePolicy} as corp
@@ -7,6 +8,7 @@ import plume/origin_agent_cluster.{type OriginAgentCluster} as oac
 
 pub opaque type Config {
   Config(
+    content_type_options: Option(ContentTypeOptions),
     cross_origin_embedder_policy: Option(CrossOriginEmbedderPolicy),
     cross_origin_opener_policy: Option(CrossOriginOpenerPolicy),
     cross_origin_resource_policy: Option(CrossOriginResourcePolicy),
@@ -16,6 +18,7 @@ pub opaque type Config {
 
 pub fn default() -> Config {
   Config(
+    content_type_options: Some(cto.NoSniff),
     cross_origin_embedder_policy: None,
     cross_origin_opener_policy: Some(coop.SameOrigin),
     cross_origin_resource_policy: Some(corp.SameOrigin),
@@ -25,6 +28,11 @@ pub fn default() -> Config {
 
 pub fn set_headers(resp: Response(body), config: Config) -> Response(body) {
   resp
+  |> set_if_some(
+    config.content_type_options,
+    "x-content-type-options",
+    cto.to_string,
+  )
   |> set_if_some(
     config.cross_origin_embedder_policy,
     "cross-origin-embedder-policy",
@@ -49,9 +57,9 @@ pub fn set_headers(resp: Response(body), config: Config) -> Response(body) {
 
 fn set_if_some(
   resp: Response(body),
-  value: Option(policy),
+  value: Option(value),
   name: String,
-  render: fn(policy) -> String,
+  render: fn(value) -> String,
 ) -> Response(body) {
   case value {
     Some(v) ->

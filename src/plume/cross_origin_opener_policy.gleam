@@ -24,8 +24,8 @@ pub type CrossOriginOpenerPolicy {
   NoopenerAllowPopups
 }
 
-pub fn to_string(policy: CrossOriginOpenerPolicy) -> String {
-  case policy {
+pub fn to_string(value: CrossOriginOpenerPolicy) -> String {
+  case value {
     UnsafeNone -> "unsafe-none"
     SameOrigin -> "same-origin"
     SameOriginAllowPopups -> "same-origin-allow-popups"

@@ -17,8 +17,8 @@ pub type CrossOriginResourcePolicy {
   CrossOrigin
 }
 
-pub fn to_string(policy: CrossOriginResourcePolicy) -> String {
-  case policy {
+pub fn to_string(value: CrossOriginResourcePolicy) -> String {
+  case value {
     SameSite -> "same-site"
     SameOrigin -> "same-origin"
     CrossOrigin -> "cross-origin"
