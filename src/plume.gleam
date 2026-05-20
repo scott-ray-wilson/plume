@@ -6,6 +6,7 @@ import plume/cross_origin_opener_policy.{type CrossOriginOpenerPolicy} as coop
 import plume/cross_origin_resource_policy.{type CrossOriginResourcePolicy} as corp
 import plume/dns_prefetch_control.{type DnsPrefetchControl} as dpc
 import plume/download_options.{type DownloadOptions} as do
+import plume/frame_options.{type FrameOptions} as fo
 import plume/origin_agent_cluster.{type OriginAgentCluster} as oac
 
 pub opaque type Config {
@@ -16,6 +17,7 @@ pub opaque type Config {
     cross_origin_resource_policy: Option(CrossOriginResourcePolicy),
     dns_prefetch_control: Option(DnsPrefetchControl),
     download_options: Option(DownloadOptions),
+    frame_options: Option(FrameOptions),
     origin_agent_cluster: Option(OriginAgentCluster),
   )
 }
@@ -28,6 +30,7 @@ pub fn default() -> Config {
     cross_origin_resource_policy: Some(corp.SameOrigin),
     dns_prefetch_control: Some(dpc.Off),
     download_options: Some(do.NoOpen),
+    frame_options: Some(fo.SameOrigin),
     origin_agent_cluster: Some(oac.Enabled),
   )
 }
@@ -64,6 +67,7 @@ pub fn set_headers(resp: Response(body), config: Config) -> Response(body) {
     "x-download-options",
     do.to_string,
   )
+  |> set_header_if_some(config.frame_options, "x-frame-options", fo.to_string)
   |> set_header_if_some(
     config.origin_agent_cluster,
     "origin-agent-cluster",
