@@ -9,6 +9,7 @@ import plume/dns_prefetch_control.{type DnsPrefetchControl} as dpc
 import plume/download_options.{type DownloadOptions} as do
 import plume/frame_options.{type FrameOptions} as fo
 import plume/origin_agent_cluster.{type OriginAgentCluster} as oac
+import plume/permissions_policy.{type PermissionsPolicy} as pp
 import plume/permitted_cross_domain_policies.{type PermittedCrossDomainPolicies} as pcdp
 import plume/referrer_policy.{type ReferrerPolicy} as rp
 import plume/strict_transport_security.{type StrictTransportSecurity} as sts
@@ -26,6 +27,7 @@ pub opaque type Config {
     download_options: Option(DownloadOptions),
     frame_options: Option(FrameOptions),
     origin_agent_cluster: Option(OriginAgentCluster),
+    permissions_policy: Option(PermissionsPolicy),
     permitted_cross_domain_policies: Option(PermittedCrossDomainPolicies),
     referrer_policy: Option(ReferrerPolicy),
     strict_transport_security: Option(StrictTransportSecurity),
@@ -59,6 +61,7 @@ pub fn default() -> Config {
     download_options: Some(do.NoOpen),
     frame_options: Some(fo.SameOrigin),
     origin_agent_cluster: Some(oac.Enabled),
+    permissions_policy: None,
     permitted_cross_domain_policies: Some(pcdp.None),
     referrer_policy: Some(rp.NoReferrer),
     strict_transport_security: Some(sts.IncludeSubDomains(31_536_000)),
@@ -113,6 +116,11 @@ pub fn set_headers(resp: Response(body), config: Config) -> Response(body) {
     config.origin_agent_cluster,
     "origin-agent-cluster",
     oac.to_string,
+  )
+  |> set_header_if_some(
+    config.permissions_policy,
+    "permissions-policy",
+    pp.to_string,
   )
   |> set_header_if_some(
     config.permitted_cross_domain_policies,
