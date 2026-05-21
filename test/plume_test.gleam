@@ -23,5 +23,6 @@ pub fn plume_default_test() {
   assert response.get_header(resp, "origin-agent-cluster") == Ok("?1")
   assert response.get_header(resp, "x-permitted-cross-domain-policies")
     == Ok("none")
+  assert response.get_header(resp, "referrer-policy") == Ok("no-referrer")
   assert response.get_header(resp, "x-xss-protection") == Ok("0")
 }

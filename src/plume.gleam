@@ -11,6 +11,7 @@ import plume/origin_agent_cluster.{type OriginAgentCluster} as oac
 import plume/permitted_cross_domain_policies.{
   type PermittedCrossDomainPolicies,
 } as pcdp
+import plume/referrer_policy.{type ReferrerPolicy} as rp
 import plume/xss_protection.{type XssProtection} as xp
 
 pub opaque type Config {
@@ -24,6 +25,7 @@ pub opaque type Config {
     frame_options: Option(FrameOptions),
     origin_agent_cluster: Option(OriginAgentCluster),
     permitted_cross_domain_policies: Option(PermittedCrossDomainPolicies),
+    referrer_policy: Option(ReferrerPolicy),
     xss_protection: Option(XssProtection),
   )
 }
@@ -39,6 +41,7 @@ pub fn default() -> Config {
     frame_options: Some(fo.SameOrigin),
     origin_agent_cluster: Some(oac.Enabled),
     permitted_cross_domain_policies: Some(pcdp.None),
+    referrer_policy: Some(rp.NoReferrer),
     xss_protection: Some(xp.Disabled),
   )
 }
@@ -85,6 +88,11 @@ pub fn set_headers(resp: Response(body), config: Config) -> Response(body) {
     config.permitted_cross_domain_policies,
     "x-permitted-cross-domain-policies",
     pcdp.to_string,
+  )
+  |> set_header_if_some(
+    config.referrer_policy,
+    "referrer-policy",
+    rp.to_string,
   )
   |> set_header_if_some(
     config.xss_protection,

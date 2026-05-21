@@ -11,8 +11,6 @@
 ////
 //// See the [MDN docs](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Cross-Origin-Embedder-Policy).
 
-// TODO: explore supporting report-to
-
 pub type CrossOriginEmbedderPolicy {
   /// Allows the document to fetch cross-origin resources without
   /// explicit permission via [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CORS) or
