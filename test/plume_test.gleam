@@ -11,6 +11,15 @@ pub fn plume_default_test() {
 
   let resp = plume.set_headers(response.new(200), config)
 
+  assert response.get_header(resp, "content-security-policy")
+    == Ok(
+      "default-src 'self'; base-uri 'self'; font-src 'self' https: data:; "
+      <> "form-action 'self'; frame-ancestors 'self'; img-src 'self' data:; "
+      <> "object-src 'none'; script-src 'self'; script-src-attr 'none'; "
+      <> "style-src 'self' https: 'unsafe-inline'; upgrade-insecure-requests",
+    )
+  assert response.get_header(resp, "content-security-policy-report-only")
+    == Error(Nil)
   assert response.get_header(resp, "x-content-type-options") == Ok("nosniff")
   assert response.get_header(resp, "cross-origin-embedder-policy") == Error(Nil)
   assert response.get_header(resp, "cross-origin-opener-policy")

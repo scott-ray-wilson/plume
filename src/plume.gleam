@@ -1,5 +1,6 @@
 import gleam/http/response.{type Response}
 import gleam/option.{type Option, None, Some}
+import plume/content_security_policy.{type ContentSecurityPolicy} as csp
 import plume/content_type_options.{type ContentTypeOptions} as cto
 import plume/cross_origin_embedder_policy.{type CrossOriginEmbedderPolicy} as coep
 import plume/cross_origin_opener_policy.{type CrossOriginOpenerPolicy} as coop
@@ -15,6 +16,8 @@ import plume/xss_protection.{type XssProtection} as xp
 
 pub opaque type Config {
   Config(
+    content_security_policy: Option(ContentSecurityPolicy),
+    content_security_policy_report_only: Option(ContentSecurityPolicy),
     content_type_options: Option(ContentTypeOptions),
     cross_origin_embedder_policy: Option(CrossOriginEmbedderPolicy),
     cross_origin_opener_policy: Option(CrossOriginOpenerPolicy),
@@ -32,6 +35,22 @@ pub opaque type Config {
 
 pub fn default() -> Config {
   Config(
+    content_security_policy: Some(
+      csp.Policy([
+        csp.DefaultSrc([csp.Self]),
+        csp.BaseUri([csp.Self]),
+        csp.FontSrc([csp.Self, csp.Scheme("https"), csp.Scheme("data")]),
+        csp.FormAction([csp.Self]),
+        csp.FrameAncestors([csp.Self]),
+        csp.ImgSrc([csp.Self, csp.Scheme("data")]),
+        csp.ObjectSrc([csp.None]),
+        csp.ScriptSrc([csp.Self]),
+        csp.ScriptSrcAttr([csp.None]),
+        csp.StyleSrc([csp.Self, csp.Scheme("https"), csp.UnsafeInline]),
+        csp.UpgradeInsecureRequests,
+      ]),
+    ),
+    content_security_policy_report_only: None,
     content_type_options: Some(cto.NoSniff),
     cross_origin_embedder_policy: None,
     cross_origin_opener_policy: Some(coop.SameOrigin),
@@ -49,6 +68,16 @@ pub fn default() -> Config {
 
 pub fn set_headers(resp: Response(body), config: Config) -> Response(body) {
   resp
+  |> set_header_if_some(
+    config.content_security_policy,
+    "content-security-policy",
+    csp.to_string,
+  )
+  |> set_header_if_some(
+    config.content_security_policy_report_only,
+    "content-security-policy-report-only",
+    csp.to_string,
+  )
   |> set_header_if_some(
     config.content_type_options,
     "x-content-type-options",
