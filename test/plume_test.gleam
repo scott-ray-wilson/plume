@@ -6,6 +6,28 @@ pub fn main() -> Nil {
   gleeunit.main()
 }
 
+pub fn plume_new_test() {
+  let config = plume.new()
+
+  let resp = plume.set_headers(response.new(200), config)
+
+  assert response.get_header(resp, "content-security-policy") == Error(Nil)
+  assert response.get_header(resp, "x-content-type-options") == Error(Nil)
+  assert response.get_header(resp, "cross-origin-embedder-policy") == Error(Nil)
+  assert response.get_header(resp, "cross-origin-opener-policy") == Error(Nil)
+  assert response.get_header(resp, "cross-origin-resource-policy") == Error(Nil)
+  assert response.get_header(resp, "x-dns-prefetch-control") == Error(Nil)
+  assert response.get_header(resp, "x-download-options") == Error(Nil)
+  assert response.get_header(resp, "x-frame-options") == Error(Nil)
+  assert response.get_header(resp, "origin-agent-cluster") == Error(Nil)
+  assert response.get_header(resp, "permissions-policy") == Error(Nil)
+  assert response.get_header(resp, "x-permitted-cross-domain-policies")
+    == Error(Nil)
+  assert response.get_header(resp, "referrer-policy") == Error(Nil)
+  assert response.get_header(resp, "strict-transport-security") == Error(Nil)
+  assert response.get_header(resp, "x-xss-protection") == Error(Nil)
+}
+
 pub fn plume_default_test() {
   let config = plume.default()
 

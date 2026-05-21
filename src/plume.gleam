@@ -34,6 +34,25 @@ pub opaque type Config {
   )
 }
 
+pub fn new() -> Config {
+  Config(
+    content_security_policy: None,
+    content_type_options: None,
+    cross_origin_embedder_policy: None,
+    cross_origin_opener_policy: None,
+    cross_origin_resource_policy: None,
+    dns_prefetch_control: None,
+    download_options: None,
+    frame_options: None,
+    origin_agent_cluster: None,
+    permissions_policy: None,
+    permitted_cross_domain_policies: None,
+    referrer_policy: None,
+    strict_transport_security: None,
+    xss_protection: None,
+  )
+}
+
 pub fn default() -> Config {
   Config(
     content_security_policy: Some(
