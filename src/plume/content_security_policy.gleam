@@ -80,12 +80,6 @@ pub type Directive {
   /// `sandbox` attribute. Pass an empty list to apply the maximum
   /// restrictions.
   Sandbox(List(SandboxToken))
-  /// URIs that the browser should send violation reports to. Deprecated in
-  /// favor of `report-to` but still widely supported.
-  ReportUri(List(String))
-  /// Names a reporting group defined via the `Reporting-Endpoints` header
-  /// that violation reports should be sent to.
-  ReportTo(String)
   /// Instructs the browser to upgrade insecure requests (HTTP) to secure
   /// requests (HTTPS) before fetching.
   UpgradeInsecureRequests
@@ -123,9 +117,6 @@ pub type Source {
   /// handlers and `style` attributes, which are otherwise excluded from
   /// hash matching. Rendered as `'unsafe-hashes'`.
   UnsafeHashes
-  /// Requires that violation reports include a sample of the offending
-  /// resource. Rendered as `'report-sample'`.
-  ReportSample
   /// Allows inline `<script type="speculationrules">` blocks used by the
   /// Speculation Rules API. Rendered as `'inline-speculation-rules'`.
   InlineSpeculationRules
@@ -235,8 +226,6 @@ fn directive_to_string(directive: Directive) -> String {
     BaseUri(sources) -> render_sources("base-uri", sources)
     FormAction(sources) -> render_sources("form-action", sources)
     Sandbox(tokens) -> render_tokens("sandbox", tokens)
-    ReportUri(uris) -> string.join(["report-uri", ..uris], " ")
-    ReportTo(group) -> "report-to " <> group
     UpgradeInsecureRequests -> "upgrade-insecure-requests"
     RequireTrustedTypesFor(sinks) ->
       string.join(
@@ -271,7 +260,6 @@ fn source_to_string(source: Source) -> String {
     StrictDynamic -> "'strict-dynamic'"
     WasmUnsafeEval -> "'wasm-unsafe-eval'"
     UnsafeHashes -> "'unsafe-hashes'"
-    ReportSample -> "'report-sample'"
     InlineSpeculationRules -> "'inline-speculation-rules'"
     Wildcard -> "*"
     Host(value) -> value

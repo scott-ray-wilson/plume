@@ -18,7 +18,6 @@ import plume/xss_protection.{type XssProtection} as xp
 pub opaque type Config {
   Config(
     content_security_policy: Option(ContentSecurityPolicy),
-    content_security_policy_report_only: Option(ContentSecurityPolicy),
     content_type_options: Option(ContentTypeOptions),
     cross_origin_embedder_policy: Option(CrossOriginEmbedderPolicy),
     cross_origin_opener_policy: Option(CrossOriginOpenerPolicy),
@@ -52,7 +51,6 @@ pub fn default() -> Config {
         csp.UpgradeInsecureRequests,
       ]),
     ),
-    content_security_policy_report_only: None,
     content_type_options: Some(cto.NoSniff),
     cross_origin_embedder_policy: None,
     cross_origin_opener_policy: Some(coop.SameOrigin),
@@ -74,11 +72,6 @@ pub fn set_headers(resp: Response(body), config: Config) -> Response(body) {
   |> set_header_if_some(
     config.content_security_policy,
     "content-security-policy",
-    csp.to_string,
-  )
-  |> set_header_if_some(
-    config.content_security_policy_report_only,
-    "content-security-policy-report-only",
     csp.to_string,
   )
   |> set_header_if_some(

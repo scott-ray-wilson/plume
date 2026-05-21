@@ -54,12 +54,6 @@ pub fn directive_to_header_test() {
     == "base-uri 'self'"
   assert csp.to_string(csp.Policy([csp.FormAction([csp.Self])]))
     == "form-action 'self'"
-  assert csp.to_string(csp.Policy([csp.ReportUri(["/csp-report"])]))
-    == "report-uri /csp-report"
-  assert csp.to_string(csp.Policy([csp.ReportUri(["/report-a", "/report-b"])]))
-    == "report-uri /report-a /report-b"
-  assert csp.to_string(csp.Policy([csp.ReportTo("default")]))
-    == "report-to default"
   assert csp.to_string(csp.Policy([csp.UpgradeInsecureRequests]))
     == "upgrade-insecure-requests"
   assert csp.to_string(csp.Policy([csp.RequireTrustedTypesFor([csp.Script])]))
@@ -99,8 +93,6 @@ pub fn source_to_header_test() {
     == "default-src 'wasm-unsafe-eval'"
   assert csp.to_string(csp.Policy([csp.DefaultSrc([csp.UnsafeHashes])]))
     == "default-src 'unsafe-hashes'"
-  assert csp.to_string(csp.Policy([csp.DefaultSrc([csp.ReportSample])]))
-    == "default-src 'report-sample'"
   assert csp.to_string(csp.Policy([csp.DefaultSrc([csp.InlineSpeculationRules])]))
     == "default-src 'inline-speculation-rules'"
   assert csp.to_string(csp.Policy([csp.DefaultSrc([csp.Wildcard])]))

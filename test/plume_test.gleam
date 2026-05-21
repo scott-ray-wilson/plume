@@ -18,8 +18,6 @@ pub fn plume_default_test() {
       <> "object-src 'none'; script-src 'self'; script-src-attr 'none'; "
       <> "style-src 'self' https: 'unsafe-inline'; upgrade-insecure-requests",
     )
-  assert response.get_header(resp, "content-security-policy-report-only")
-    == Error(Nil)
   assert response.get_header(resp, "x-content-type-options") == Ok("nosniff")
   assert response.get_header(resp, "cross-origin-embedder-policy") == Error(Nil)
   assert response.get_header(resp, "cross-origin-opener-policy")
