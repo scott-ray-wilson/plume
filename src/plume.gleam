@@ -86,6 +86,13 @@ pub fn default() -> Config {
   )
 }
 
+pub fn middleware(
+  config: Config,
+  handler: fn() -> Response(body),
+) -> Response(body) {
+  handler() |> set_headers(config)
+}
+
 pub fn set_headers(resp: Response(body), config: Config) -> Response(body) {
   resp
   |> set_header_if_some(
