@@ -24,5 +24,7 @@ pub fn plume_default_test() {
   assert response.get_header(resp, "x-permitted-cross-domain-policies")
     == Ok("none")
   assert response.get_header(resp, "referrer-policy") == Ok("no-referrer")
+  assert response.get_header(resp, "strict-transport-security")
+    == Ok("max-age=31536000; includeSubDomains")
   assert response.get_header(resp, "x-xss-protection") == Ok("0")
 }

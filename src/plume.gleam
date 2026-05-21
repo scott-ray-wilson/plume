@@ -8,10 +8,9 @@ import plume/dns_prefetch_control.{type DnsPrefetchControl} as dpc
 import plume/download_options.{type DownloadOptions} as do
 import plume/frame_options.{type FrameOptions} as fo
 import plume/origin_agent_cluster.{type OriginAgentCluster} as oac
-import plume/permitted_cross_domain_policies.{
-  type PermittedCrossDomainPolicies,
-} as pcdp
+import plume/permitted_cross_domain_policies.{type PermittedCrossDomainPolicies} as pcdp
 import plume/referrer_policy.{type ReferrerPolicy} as rp
+import plume/strict_transport_security.{type StrictTransportSecurity} as sts
 import plume/xss_protection.{type XssProtection} as xp
 
 pub opaque type Config {
@@ -26,6 +25,7 @@ pub opaque type Config {
     origin_agent_cluster: Option(OriginAgentCluster),
     permitted_cross_domain_policies: Option(PermittedCrossDomainPolicies),
     referrer_policy: Option(ReferrerPolicy),
+    strict_transport_security: Option(StrictTransportSecurity),
     xss_protection: Option(XssProtection),
   )
 }
@@ -42,6 +42,7 @@ pub fn default() -> Config {
     origin_agent_cluster: Some(oac.Enabled),
     permitted_cross_domain_policies: Some(pcdp.None),
     referrer_policy: Some(rp.NoReferrer),
+    strict_transport_security: Some(sts.IncludeSubDomains(31_536_000)),
     xss_protection: Some(xp.Disabled),
   )
 }
@@ -89,16 +90,13 @@ pub fn set_headers(resp: Response(body), config: Config) -> Response(body) {
     "x-permitted-cross-domain-policies",
     pcdp.to_string,
   )
+  |> set_header_if_some(config.referrer_policy, "referrer-policy", rp.to_string)
   |> set_header_if_some(
-    config.referrer_policy,
-    "referrer-policy",
-    rp.to_string,
+    config.strict_transport_security,
+    "strict-transport-security",
+    sts.to_string,
   )
-  |> set_header_if_some(
-    config.xss_protection,
-    "x-xss-protection",
-    xp.to_string,
-  )
+  |> set_header_if_some(config.xss_protection, "x-xss-protection", xp.to_string)
 }
 
 fn set_header_if_some(
