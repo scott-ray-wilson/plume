@@ -146,7 +146,8 @@ pub fn to_string(value: PermissionsPolicy) -> String {
 fn directive_to_string(directive: Directive) -> String {
   case directive {
     Accelerometer(allowlist) -> render_directive("accelerometer", allowlist)
-    AmbientLightSensor(allowlist) -> render_directive("ambient-light-sensor", allowlist)
+    AmbientLightSensor(allowlist) ->
+      render_directive("ambient-light-sensor", allowlist)
     AriaNotify(allowlist) -> render_directive("aria-notify", allowlist)
     AttributionReporting(allowlist) ->
       render_directive("attribution-reporting", allowlist)
@@ -158,8 +159,10 @@ fn directive_to_string(directive: Directive) -> String {
       render_directive("captured-surface-control", allowlist)
     ChUaHighEntropyValues(allowlist) ->
       render_directive("ch-ua-high-entropy-values", allowlist)
-    ComputePressure(allowlist) -> render_directive("compute-pressure", allowlist)
-    CrossOriginIsolated(allowlist) -> render_directive("cross-origin-isolated", allowlist)
+    ComputePressure(allowlist) ->
+      render_directive("compute-pressure", allowlist)
+    CrossOriginIsolated(allowlist) ->
+      render_directive("cross-origin-isolated", allowlist)
     DeferredFetch(allowlist) -> render_directive("deferred-fetch", allowlist)
     DeferredFetchMinimal(allowlist) ->
       render_directive("deferred-fetch-minimal", allowlist)
@@ -173,7 +176,8 @@ fn directive_to_string(directive: Directive) -> String {
     IdentityCredentialsGet(allowlist) ->
       render_directive("identity-credentials-get", allowlist)
     IdleDetection(allowlist) -> render_directive("idle-detection", allowlist)
-    LanguageDetector(allowlist) -> render_directive("language-detector", allowlist)
+    LanguageDetector(allowlist) ->
+      render_directive("language-detector", allowlist)
     LocalFonts(allowlist) -> render_directive("local-fonts", allowlist)
     Magnetometer(allowlist) -> render_directive("magnetometer", allowlist)
     Microphone(allowlist) -> render_directive("microphone", allowlist)
@@ -182,7 +186,8 @@ fn directive_to_string(directive: Directive) -> String {
       render_directive("on-device-speech-recognition", allowlist)
     OtpCredentials(allowlist) -> render_directive("otp-credentials", allowlist)
     Payment(allowlist) -> render_directive("payment", allowlist)
-    PictureInPicture(allowlist) -> render_directive("picture-in-picture", allowlist)
+    PictureInPicture(allowlist) ->
+      render_directive("picture-in-picture", allowlist)
     PrivateStateTokenIssuance(allowlist) ->
       render_directive("private-state-token-issuance", allowlist)
     PrivateStateTokenRedemption(allowlist) ->
@@ -193,19 +198,21 @@ fn directive_to_string(directive: Directive) -> String {
       render_directive("publickey-credentials-get", allowlist)
     ScreenWakeLock(allowlist) -> render_directive("screen-wake-lock", allowlist)
     Serial(allowlist) -> render_directive("serial", allowlist)
-    SpeakerSelection(allowlist) -> render_directive("speaker-selection", allowlist)
+    SpeakerSelection(allowlist) ->
+      render_directive("speaker-selection", allowlist)
     StorageAccess(allowlist) -> render_directive("storage-access", allowlist)
     Summarizer(allowlist) -> render_directive("summarizer", allowlist)
     Translator(allowlist) -> render_directive("translator", allowlist)
     Usb(allowlist) -> render_directive("usb", allowlist)
     WebShare(allowlist) -> render_directive("web-share", allowlist)
-    WindowManagement(allowlist) -> render_directive("window-management", allowlist)
-    XrSpatialTracking(allowlist) -> render_directive("xr-spatial-tracking", allowlist)
+    WindowManagement(allowlist) ->
+      render_directive("window-management", allowlist)
+    XrSpatialTracking(allowlist) ->
+      render_directive("xr-spatial-tracking", allowlist)
   }
 }
 
 fn render_directive(name: String, allowlist: Allowlist) -> String {
-
   name <> "=" <> allowlist_to_string(allowlist)
 }
 

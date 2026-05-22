@@ -93,7 +93,9 @@ pub fn source_to_header_test() {
     == "default-src 'wasm-unsafe-eval'"
   assert csp.to_string(csp.Policy([csp.DefaultSrc([csp.UnsafeHashes])]))
     == "default-src 'unsafe-hashes'"
-  assert csp.to_string(csp.Policy([csp.DefaultSrc([csp.InlineSpeculationRules])]))
+  assert csp.to_string(
+      csp.Policy([csp.DefaultSrc([csp.InlineSpeculationRules])]),
+    )
     == "default-src 'inline-speculation-rules'"
   assert csp.to_string(csp.Policy([csp.DefaultSrc([csp.Wildcard])]))
     == "default-src *"

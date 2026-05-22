@@ -43,7 +43,9 @@ pub fn directive_to_header_test() {
     == "ch-ua-high-entropy-values=(self)"
   assert pp.to_string(pp.Policy([pp.ComputePressure(pp.Origins([pp.Self]))]))
     == "compute-pressure=(self)"
-  assert pp.to_string(pp.Policy([pp.CrossOriginIsolated(pp.Origins([pp.Self]))]))
+  assert pp.to_string(
+      pp.Policy([pp.CrossOriginIsolated(pp.Origins([pp.Self]))]),
+    )
     == "cross-origin-isolated=(self)"
   assert pp.to_string(pp.Policy([pp.DeferredFetch(pp.Origins([pp.Self]))]))
     == "deferred-fetch=(self)"
