@@ -1,6 +1,9 @@
 import gleam/http/response
+import gleam/option.{None, Some}
 import gleeunit
 import plume
+import plume/content_security_policy as csp
+import plume/frame_options as fo
 
 pub fn main() -> Nil {
   gleeunit.main()
@@ -67,4 +70,34 @@ pub fn plume_default_test() {
   assert response.get_header(resp, "strict-transport-security")
     == Ok("max-age=31536000; includeSubDomains")
   assert response.get_header(resp, "x-xss-protection") == Ok("0")
+}
+
+pub fn plume_default_override_frame_options_test() {
+  let config = plume.Config(..plume.default(), frame_options: Some(fo.Deny))
+
+  let resp = plume.set_headers(response.new(200), config)
+
+  assert response.get_header(resp, "x-frame-options") == Ok("DENY")
+}
+
+pub fn plume_default_remove_xss_protection_test() {
+  let config = plume.Config(..plume.default(), xss_protection: None)
+
+  let resp = plume.set_headers(response.new(200), config)
+
+  assert response.get_header(resp, "x-xss-protection") == Error(Nil)
+  assert response.get_header(resp, "x-frame-options") == Ok("SAMEORIGIN")
+}
+
+pub fn plume_new_with_csp_test() {
+  let my_csp = csp.Policy([csp.DefaultSrc([csp.Self])])
+  let config =
+    plume.Config(..plume.new(), content_security_policy: Some(my_csp))
+
+  let resp = plume.set_headers(response.new(200), config)
+
+  assert response.get_header(resp, "content-security-policy")
+    == Ok("default-src 'self'")
+  assert response.get_header(resp, "x-content-type-options") == Error(Nil)
+  assert response.get_header(resp, "x-frame-options") == Error(Nil)
 }

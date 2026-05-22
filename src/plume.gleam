@@ -15,7 +15,7 @@ import plume/referrer_policy.{type ReferrerPolicy} as rp
 import plume/strict_transport_security.{type StrictTransportSecurity} as sts
 import plume/xss_protection.{type XssProtection} as xp
 
-pub opaque type Config {
+pub type Config {
   Config(
     content_security_policy: Option(ContentSecurityPolicy),
     content_type_options: Option(ContentTypeOptions),
