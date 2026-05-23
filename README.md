@@ -1,20 +1,23 @@
 # plume
 
 [![Package Version](https://img.shields.io/hexpm/v/plume)](https://hex.pm/packages/plume)
+[![Downloads](https://img.shields.io/hexpm/dt/plume)](https://hex.pm/packages/plume)
 [![Hex Docs](https://img.shields.io/badge/hex-docs-ffaff3)](https://hexdocs.pm/plume/)
+[![Test](https://github.com/scott-ray-wilson/plume/actions/workflows/test.yml/badge.svg)](https://github.com/scott-ray-wilson/plume/actions/workflows/test.yml)
+[![License](https://img.shields.io/hexpm/l/plume)](https://github.com/scott-ray-wilson/plume/blob/main/LICENSE)
 
 Sensible HTTP security headers for Gleam web servers, inspired by
-[Helmet](https://helmetjs.github.io/).
+[helmet](https://helmetjs.github.io/).
 
-Each header is modelled as a typed variant — no string-based values. Built
-on [`gleam_http`](https://hexdocs.pm/gleam_http/), so it works with
-[Wisp](https://hexdocs.pm/wisp/), [Mist](https://hexdocs.pm/mist/), or anything
-else built on it ([examples below](#integrations)).
+Built
+on [gleam_http](https://hexdocs.pm/gleam_http/), so it works with
+[wisp](https://hexdocs.pm/wisp/), [mist](https://hexdocs.pm/mist/), or any
+other compatible server ([examples below](#integrations)).
 
 ## Install
 
 ```sh
-gleam add plume@1
+gleam add plume@0.1
 ```
 
 ## Usage

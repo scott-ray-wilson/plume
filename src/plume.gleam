@@ -1,5 +1,8 @@
 //// Sensible HTTP security headers for Gleam web servers, inspired by
-//// [Helmet](https://helmetjs.github.io/).
+//// [helmet](https://helmetjs.github.io/). Built on
+//// [gleam_http](https://hexdocs.pm/gleam_http/), so it works with
+//// [wisp](https://hexdocs.pm/wisp/), [mist](https://hexdocs.pm/mist/), or
+//// any other compatible server.
 ////
 //// Build a `Config` describing which headers to set on outgoing responses,
 //// then apply it. `default` ships a reasonable starter policy; `new`
