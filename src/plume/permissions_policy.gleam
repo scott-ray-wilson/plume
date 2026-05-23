@@ -1,6 +1,6 @@
 //// Permissions-Policy
 ////
-//// This response header (formerly `Feature-Policy`) lets a site declare which
+//// This response header lets a site declare which
 //// browser features the document and any embedded frames are allowed to use.
 //// A policy is a comma-separated list of directives, each pairing a feature
 //// name with an allowlist of origins that may use it.
