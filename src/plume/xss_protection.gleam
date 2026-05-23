@@ -10,6 +10,8 @@
 ////
 //// See the [MDN docs](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/X-XSS-Protection).
 
+/// An `X-XSS-Protection` header value.
+///
 pub type XssProtection {
   /// Disables XSS filtering. Plume default.
   Disabled
@@ -21,6 +23,8 @@ pub type XssProtection {
   Block
 }
 
+/// Encode as the `X-XSS-Protection` header value.
+///
 pub fn to_string(value: XssProtection) -> String {
   case value {
     Disabled -> "0"

@@ -1,3 +1,24 @@
+//// Sensible HTTP security headers for Gleam web servers, inspired by
+//// [Helmet](https://helmetjs.github.io/).
+////
+//// Build a `Config` describing which headers to set on outgoing responses,
+//// then apply it. `default` ships a reasonable starter policy; `new`
+//// starts with no headers set.
+////
+//// As `use` middleware:
+////
+//// ```gleam
+//// use <- plume.middleware(plume.default())
+//// response.new(200)
+//// ```
+////
+//// Or directly on a response:
+////
+//// ```gleam
+//// response.new(200)
+//// |> plume.set_headers(plume.default())
+//// ```
+
 import gleam/http/response.{type Response}
 import gleam/option.{type Option, None, Some}
 import plume/content_security_policy.{type ContentSecurityPolicy} as csp
@@ -15,6 +36,9 @@ import plume/referrer_policy.{type ReferrerPolicy} as rp
 import plume/strict_transport_security.{type StrictTransportSecurity} as sts
 import plume/xss_protection.{type XssProtection} as xp
 
+/// Which security headers Plume should set on a response. Each field is
+/// optional — `None` leaves the corresponding header untouched.
+///
 pub type Config {
   Config(
     content_security_policy: Option(ContentSecurityPolicy),
@@ -34,6 +58,9 @@ pub type Config {
   )
 }
 
+/// A `Config` with no headers configured. Use this when you want to opt in
+/// to each header individually rather than starting from `default`.
+///
 pub fn new() -> Config {
   Config(
     content_security_policy: None,
@@ -53,6 +80,18 @@ pub fn new() -> Config {
   )
 }
 
+/// A `Config` with sensible defaults: a starter CSP, `nosniff`,
+/// `SameOrigin` frame options, HSTS for one year on the host and its
+/// subdomains, and other widely-recommended values.
+///
+/// ## Examples
+///
+/// Override individual fields with record update syntax:
+///
+/// ```gleam
+/// Config(..default(), frame_options: Some(frame_options.Deny))
+/// ```
+///
 pub fn default() -> Config {
   Config(
     content_security_policy: Some(
@@ -86,6 +125,8 @@ pub fn default() -> Config {
   )
 }
 
+/// Run `handler` and set the headers from `config` on the resulting response.
+///
 pub fn middleware(
   config: Config,
   handler: fn() -> Response(body),
@@ -93,6 +134,8 @@ pub fn middleware(
   handler() |> set_headers(config)
 }
 
+/// Set the headers from `config` on an existing response.
+///
 pub fn set_headers(resp: Response(body), config: Config) -> Response(body) {
   resp
   |> set_header_if_some(

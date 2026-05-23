@@ -6,39 +6,38 @@
 //// leaking sensitive data contained in URLs (such as session identifiers or
 //// internal paths) to third-party sites.
 ////
+//// In the descriptions below, "full URL" refers to the origin, path, and
+//// query string; the fragment is always stripped from the `Referer` header.
+////
 //// See the [MDN docs](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Referrer-Policy).
 
+/// A `Referrer-Policy` header value.
+///
 pub type ReferrerPolicy {
-  /// The `Referer` header is omitted entirely. No referrer information is sent
-  /// with requests. Plume default.
+  /// Omit the `Referer` header entirely. Plume default.
   NoReferrer
-  /// Send the origin, path, and querystring when the protocol security level
-  /// stays the same or improves (HTTP→HTTP, HTTP→HTTPS, HTTPS→HTTPS). Don't
-  /// send the header for requests to less secure destinations (HTTPS→HTTP).
+  /// Send the full URL except when downgrading from HTTPS to HTTP.
   NoReferrerWhenDowngrade
-  /// Only send the origin of the document as the referrer.
+  /// Send only the document's origin.
   Origin
-  /// Send the origin, path, and querystring for same-origin requests, but only
-  /// the origin for cross-origin requests.
+  /// Send the full URL for same-origin requests, just the origin for
+  /// cross-origin requests.
   OriginWhenCrossOrigin
-  /// Send the origin, path, and querystring for same-origin requests. Don't
-  /// send the header for cross-origin requests.
+  /// Send the full URL for same-origin requests; omit the header for
+  /// cross-origin requests.
   SameOrigin
-  /// Send only the origin when the protocol security level stays the same
-  /// (HTTPS→HTTPS). Don't send the header to a less secure destination
-  /// (HTTPS→HTTP).
+  /// Send only the origin, and omit the header on HTTPS→HTTP downgrades.
   StrictOrigin
-  /// Send the origin, path, and querystring for same-origin requests. Send
-  /// only the origin for cross-origin requests when the protocol security
-  /// level stays the same (HTTPS→HTTPS). Don't send the header to a less
-  /// secure destination (HTTPS→HTTP). Browser default.
+  /// Send the full URL for same-origin, just the origin for cross-origin,
+  /// and omit the header on HTTPS→HTTP downgrades. Browser default.
   StrictOriginWhenCrossOrigin
-  /// Send the origin, path, and querystring with all requests regardless of
-  /// security. This is unsafe — it may leak origins and paths from TLS-protected
-  /// resources to insecure origins.
+  /// Send the full URL with every request. Unsafe — may leak URLs from
+  /// TLS-protected resources to insecure origins.
   UnsafeUrl
 }
 
+/// Encode as the `Referrer-Policy` header value.
+///
 pub fn to_string(value: ReferrerPolicy) -> String {
   case value {
     NoReferrer -> "no-referrer"

@@ -9,6 +9,8 @@
 
 import gleam/int
 
+/// A `Strict-Transport-Security` header value.
+///
 pub type StrictTransportSecurity {
   /// Apply only to the current host, for `seconds` seconds. Use `MaxAge(0)`
   /// to clear a previously-set HSTS policy in browsers.
@@ -19,10 +21,13 @@ pub type StrictTransportSecurity {
   /// Apply to the current host and all subdomains, for `seconds` seconds, and
   /// signal consent to be included in browsers' HSTS preload lists.
   ///
-  /// The preload list also requires `seconds` to be at least 31536000 (one year).
+  /// The preload list also requires `seconds` to be at least `31_536_000`
+  /// (one year).
   Preload(seconds: Int)
 }
 
+/// Encode as the `Strict-Transport-Security` header value.
+///
 pub fn to_string(value: StrictTransportSecurity) -> String {
   case value {
     MaxAge(seconds) -> "max-age=" <> int.to_string(seconds)

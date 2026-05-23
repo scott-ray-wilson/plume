@@ -5,8 +5,10 @@
 //// on the current site. Setting the header to `none` prevents any policy
 //// files from being loaded, which is the most restrictive option.
 ////
-//// See the [OWASP docs](https://owasp.org/www-project-secure-headers/#x-permitted-cross-domain-policies).
+//// See the [MDN docs](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/X-Permitted-Cross-Domain-Policies).
 
+/// An `X-Permitted-Cross-Domain-Policies` header value.
+///
 pub type PermittedCrossDomainPolicies {
   /// No policy files are allowed anywhere on the target server. Plume default.
   None
@@ -25,6 +27,8 @@ pub type PermittedCrossDomainPolicies {
   NoneThisResponse
 }
 
+/// Encode as the `X-Permitted-Cross-Domain-Policies` header value.
+///
 pub fn to_string(value: PermittedCrossDomainPolicies) -> String {
   case value {
     None -> "none"

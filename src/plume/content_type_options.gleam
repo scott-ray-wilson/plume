@@ -8,6 +8,8 @@
 ////
 //// See the [MDN docs](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/X-Content-Type-Options).
 
+/// An `X-Content-Type-Options` header value.
+///
 pub type ContentTypeOptions {
   /// Blocks a request if the request destination is of type `style` and
   /// the MIME type is not `text/css`, or of type `script` and the MIME type
@@ -15,6 +17,8 @@ pub type ContentTypeOptions {
   NoSniff
 }
 
+/// Encode as the `X-Content-Type-Options` header value.
+///
 pub fn to_string(value: ContentTypeOptions) -> String {
   case value {
     NoSniff -> "nosniff"

@@ -7,12 +7,16 @@
 ////
 //// See the [Microsoft docs](https://learn.microsoft.com/en-us/archive/blogs/ie/ie8-security-part-v-comprehensive-protection).
 
+/// An `X-Download-Options` header value.
+///
 pub type DownloadOptions {
   /// Forces downloaded files to be saved before opening, preventing execution
   /// in the site's context. Plume default.
   NoOpen
 }
 
+/// Encode as the `X-Download-Options` header value.
+///
 pub fn to_string(value: DownloadOptions) -> String {
   case value {
     NoOpen -> "noopen"

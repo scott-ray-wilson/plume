@@ -10,15 +10,29 @@
 //// defers to whichever default the browser applies. An empty allowlist
 //// (`Origins([])`) renders as `()` and disables the feature everywhere.
 ////
+//// ## Examples
+////
+//// ```gleam
+//// Policy([
+////   Geolocation(Origins([])),
+////   Camera(Origins([Self])),
+////   Fullscreen(Wildcard),
+//// ])
+//// ```
+////
 //// See the [MDN docs](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Permissions-Policy).
 
 import gleam/list
 import gleam/string
 
+/// A `Permissions-Policy` header value.
+///
 pub type PermissionsPolicy {
   Policy(List(Directive))
 }
 
+/// A single Permissions-Policy directive pairing a feature with an allowlist.
+///
 pub type Directive {
   /// Controls access to the Accelerometer API.
   Accelerometer(Allowlist)
@@ -117,6 +131,8 @@ pub type Directive {
   XrSpatialTracking(Allowlist)
 }
 
+/// The set of origins allowed to use a feature.
+///
 pub type Allowlist {
   /// Allow the feature in any origin. Rendered as `*`.
   Wildcard
@@ -126,6 +142,8 @@ pub type Allowlist {
   Origins(List(Origin))
 }
 
+/// An origin entry within an `Allowlist`.
+///
 pub type Origin {
   /// The document's own origin. Rendered as `self`.
   Self
@@ -136,6 +154,8 @@ pub type Origin {
   Url(String)
 }
 
+/// Encode as the `Permissions-Policy` header value.
+///
 pub fn to_string(value: PermissionsPolicy) -> String {
   let Policy(directives) = value
   directives

@@ -1,32 +1,39 @@
 //// Content-Security-Policy (CSP)
 ////
 //// This response header lets sites declare which resources the browser is
-//// allowed to load for a given page, mitigating [cross-site scripting (XSS)](https://developer.mozilla.org/en-US/docs/Web/Security/Attacks/XSS)
-//// and data-injection attacks. A policy is a list of directives separated
-//// by `;`, where each directive (e.g. `script-src`, `style-src`) constrains
-//// a particular resource type.
+//// allowed to load for a given page, mitigating cross-site scripting (XSS)
+//// and data-injection attacks. `plume.default()` ships a sensible starter
+//// policy.
 ////
-//// Plume ships a sensible starter policy by default; see `plume.default()`.
+//// Most directives expect at least one source. Passing an empty list (e.g.
+//// `DefaultSrc([])`) renders an incomplete directive — omit it entirely
+//// instead. `Sandbox([])` is the exception; an empty token list applies the
+//// maximum restrictions.
 ////
-//// Most directives expect at least one value. Passing an empty list (e.g.
-//// `DefaultSrc([])`) will render an incomplete directive that browsers may
-//// treat as invalid — omit the directive entirely instead. `Sandbox([])` is
-//// the exception; an empty sandbox token list applies the maximum
-//// restrictions.
+//// ## Examples
+////
+//// ```gleam
+//// Policy([
+////   DefaultSrc([Self]),
+////   ScriptSrc([Self]),
+////   ImgSrc([Self, Scheme("data")]),
+////   StyleSrc([Self, UnsafeInline]),
+//// ])
+//// ```
 ////
 //// See the [MDN docs](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Security-Policy).
 
 import gleam/list
 import gleam/string
 
+/// A `Content-Security-Policy` header value.
+///
 pub type ContentSecurityPolicy {
   Policy(List(Directive))
 }
 
-// TODO: SandboxStrict instead of Sandbox([])?
-// TODO: how to handle empty directive lists? leads to an incomplete directive
-// - we could strip, overwrite with 'none' or should we just let through?
-
+/// A single Content-Security-Policy directive.
+///
 pub type Directive {
   /// Serves as a fallback for the other fetch directives.
   DefaultSrc(List(Source))
@@ -83,19 +90,19 @@ pub type Directive {
   /// Instructs the browser to upgrade insecure requests (HTTP) to secure
   /// requests (HTTPS) before fetching.
   UpgradeInsecureRequests
-  /// Instructs user agents to control the data passed to DOM XSS sink
-  /// functions, like the `Element.innerHTML` setter.
+  /// Controls data passed to DOM XSS sink functions (e.g. `Element.innerHTML`).
   RequireTrustedTypesFor(List(TrustedTypesSink))
   /// Restricts which Trusted Types policies may be created and used by
   /// scripts.
   TrustedTypes(List(TrustedTypePolicy))
 }
 
+/// A source expression used in fetch directives.
+///
 pub type Source {
-  /// Refers to the origin from which the protected document is being served,
-  /// including the same URL scheme and port number. Rendered as `'self'`.
+  /// Same scheme, host, and port as the document. Rendered as `'self'`.
   Self
-  /// Refers to the empty set; that is, no URLs match. Rendered as `'none'`.
+  /// Matches no URLs. Rendered as `'none'`.
   None
   /// Allows the use of inline resources such as inline `<script>` elements,
   /// `javascript:` URLs, and inline event handlers. Rendered as
@@ -104,10 +111,8 @@ pub type Source {
   /// Allows the use of `eval()` and similar methods for creating code from
   /// strings. Rendered as `'unsafe-eval'`.
   UnsafeEval
-  /// Specifies that the trust explicitly given to a script present in the
-  /// markup, by accompanying it with a nonce or a hash, shall be propagated
-  /// to all the scripts loaded by that root script. Rendered as
-  /// `'strict-dynamic'`.
+  /// Propagates trust from a nonced or hashed root script to scripts it
+  /// loads. Rendered as `'strict-dynamic'`.
   StrictDynamic
   /// Allows the loading and execution of WebAssembly modules without
   /// needing to also allow `'unsafe-eval'`. Rendered as
@@ -142,12 +147,17 @@ pub type Source {
   Sha512(String)
 }
 
+/// A DOM XSS injection sink group used with the `require-trusted-types-for`
+/// directive.
+///
 pub type TrustedTypesSink {
   /// The DOM XSS injection sink group. The only sink group currently defined
   /// by the spec. Rendered as `'script'`.
   Script
 }
 
+/// A policy name or wildcard used in the `trusted-types` directive.
+///
 pub type TrustedTypePolicy {
   /// A policy name that may be created (e.g. `default`, `dompurify`).
   PolicyName(String)
@@ -160,6 +170,8 @@ pub type TrustedTypePolicy {
   AnyPolicy
 }
 
+/// A capability token allowed within the `sandbox` directive.
+///
 pub type SandboxToken {
   /// Allows downloads to be initiated by the sandboxed content.
   AllowDownloads
@@ -175,14 +187,12 @@ pub type SandboxToken {
   AllowPointerLock
   /// Allows the content to open popups (e.g. `window.open()`, `target="_blank"`).
   AllowPopups
-  /// Allows popups opened by the sandboxed content to escape the sandbox,
-  /// rather than inheriting its restrictions.
+  /// Allows popups opened by the sandboxed content to escape the sandbox.
   AllowPopupsToEscapeSandbox
   /// Allows the content to start a presentation session.
   AllowPresentation
-  /// Treats the content as being from its normal origin rather than a
-  /// unique opaque origin, allowing access to same-origin data such as
-  /// cookies and storage.
+  /// Treats the content as same-origin rather than a unique opaque origin,
+  /// allowing access to cookies and storage.
   AllowSameOrigin
   /// Allows the content to execute scripts.
   AllowScripts
@@ -196,6 +206,8 @@ pub type SandboxToken {
   AllowTopNavigationToCustomProtocols
 }
 
+/// Encode as the `Content-Security-Policy` header value.
+///
 pub fn to_string(value: ContentSecurityPolicy) -> String {
   let Policy(directives) = value
   directives

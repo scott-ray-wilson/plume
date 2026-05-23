@@ -5,18 +5,22 @@
 ////
 //// See the [MDN docs](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Cross-Origin_Resource_Policy).
 
+/// A `Cross-Origin-Resource-Policy` header value.
+///
 pub type CrossOriginResourcePolicy {
-  /// Restricts reads to requests originating from the same
-  /// [site](https://developer.mozilla.org/en-US/docs/Glossary/Site), matched by
-  /// registrable domain. Less secure than `SameOrigin`.
+  /// Restricts reads to requests from the same site (matched by registrable
+  /// domain). Less secure than `SameOrigin`.
   SameSite
-  /// Restricts reads to requests sharing the same [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin) (same scheme, host, and port). Plume default.
+  /// Restricts reads to requests sharing the same origin (same scheme,
+  /// host, and port). Plume default.
   SameOrigin
-  /// Permits reads from any [origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin). Useful when paired with
-  /// [Cross-Origin Embedder Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Cross-Origin-Embedder-Policy).
+  /// Permits reads from any origin. Useful when paired with
+  /// `Cross-Origin-Embedder-Policy`.
   CrossOrigin
 }
 
+/// Encode as the `Cross-Origin-Resource-Policy` header value.
+///
 pub fn to_string(value: CrossOriginResourcePolicy) -> String {
   case value {
     SameSite -> "same-site"

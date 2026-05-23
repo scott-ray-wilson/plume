@@ -7,6 +7,8 @@
 ////
 //// See the [MDN docs](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/X-Frame-Options).
 
+/// An `X-Frame-Options` header value.
+///
 pub type FrameOptions {
   /// The page cannot be displayed in a frame, regardless of the site
   /// attempting to do so.
@@ -16,6 +18,8 @@ pub type FrameOptions {
   SameOrigin
 }
 
+/// Encode as the `X-Frame-Options` header value.
+///
 pub fn to_string(value: FrameOptions) -> String {
   case value {
     Deny -> "DENY"
