@@ -155,6 +155,10 @@ pub fn sandbox_test() {
       csp.Policy([csp.Sandbox([csp.AllowTopNavigationToCustomProtocols])]),
     )
     == "sandbox allow-top-navigation-to-custom-protocols"
+  assert csp.to_string(
+      csp.Policy([csp.Sandbox([csp.AllowStorageAccessByUserActivation])]),
+    )
+    == "sandbox allow-storage-access-by-user-activation"
 }
 
 pub fn multi_source_test() {

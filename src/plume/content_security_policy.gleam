@@ -204,6 +204,9 @@ pub type SandboxToken {
   /// Allows the content to navigate the top-level browsing context to
   /// non-`http`/`https` URL schemes.
   AllowTopNavigationToCustomProtocols
+  /// Lets the sandboxed content request access to the parent's storage
+  /// via the Storage Access API.
+  AllowStorageAccessByUserActivation
 }
 
 /// Encode as the `Content-Security-Policy` header value.
@@ -315,5 +318,7 @@ fn sandbox_token_to_string(token: SandboxToken) -> String {
       "allow-top-navigation-by-user-activation"
     AllowTopNavigationToCustomProtocols ->
       "allow-top-navigation-to-custom-protocols"
+    AllowStorageAccessByUserActivation ->
+      "allow-storage-access-by-user-activation"
   }
 }
