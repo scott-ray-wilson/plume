@@ -94,7 +94,7 @@ pub type Directive {
   RequireTrustedTypesFor(List(TrustedTypesSink))
   /// Restricts which Trusted Types policies may be created and used by
   /// scripts.
-  TrustedTypes(List(TrustedTypePolicy))
+  TrustedTypes(List(TrustedTypesPolicy))
 }
 
 /// A source expression used in fetch directives.
@@ -158,7 +158,7 @@ pub type TrustedTypesSink {
 
 /// A policy name or wildcard used in the `trusted-types` directive.
 ///
-pub type TrustedTypePolicy {
+pub type TrustedTypesPolicy {
   /// A policy name that may be created (e.g. `default`, `dompurify`).
   PolicyName(String)
   /// Allows the same policy name to be created more than once. Rendered as
@@ -252,7 +252,7 @@ fn directive_to_string(directive: Directive) -> String {
       )
     TrustedTypes(policies) ->
       string.join(
-        ["trusted-types", ..list.map(policies, trusted_type_policy_to_string)],
+        ["trusted-types", ..list.map(policies, trusted_types_policy_to_string)],
         " ",
       )
   }
@@ -292,7 +292,7 @@ fn trusted_types_sink_to_string(sink: TrustedTypesSink) -> String {
   }
 }
 
-fn trusted_type_policy_to_string(policy: TrustedTypePolicy) -> String {
+fn trusted_types_policy_to_string(policy: TrustedTypesPolicy) -> String {
   case policy {
     PolicyName(name) -> name
     AllowDuplicates -> "'allow-duplicates'"

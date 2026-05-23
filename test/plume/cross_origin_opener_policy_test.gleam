@@ -5,5 +5,5 @@ pub fn to_header_test() {
   assert coop.to_string(coop.SameOrigin) == "same-origin"
   assert coop.to_string(coop.SameOriginAllowPopups)
     == "same-origin-allow-popups"
-  assert coop.to_string(coop.NoopenerAllowPopups) == "noopener-allow-popups"
+  assert coop.to_string(coop.NoOpenerAllowPopups) == "noopener-allow-popups"
 }

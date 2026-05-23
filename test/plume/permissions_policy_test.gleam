@@ -38,7 +38,7 @@ pub fn directive_to_header_test() {
     )
     == "captured-surface-control=(self)"
   assert pp.to_string(
-      pp.Policy([pp.ChUaHighEntropyValues(pp.Origins([pp.Self]))]),
+      pp.Policy([pp.ClientHintUserAgentHighEntropyValues(pp.Origins([pp.Self]))]),
     )
     == "ch-ua-high-entropy-values=(self)"
   assert pp.to_string(pp.Policy([pp.ComputePressure(pp.Origins([pp.Self]))]))
@@ -102,11 +102,11 @@ pub fn directive_to_header_test() {
     )
     == "private-state-token-redemption=(self)"
   assert pp.to_string(
-      pp.Policy([pp.PublickeyCredentialsCreate(pp.Origins([pp.Self]))]),
+      pp.Policy([pp.PublicKeyCredentialsCreate(pp.Origins([pp.Self]))]),
     )
     == "publickey-credentials-create=(self)"
   assert pp.to_string(
-      pp.Policy([pp.PublickeyCredentialsGet(pp.Origins([pp.Self]))]),
+      pp.Policy([pp.PublicKeyCredentialsGet(pp.Origins([pp.Self]))]),
     )
     == "publickey-credentials-get=(self)"
   assert pp.to_string(pp.Policy([pp.ScreenWakeLock(pp.Origins([pp.Self]))]))

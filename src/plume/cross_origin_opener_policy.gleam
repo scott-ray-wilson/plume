@@ -21,7 +21,7 @@ pub type CrossOriginOpenerPolicy {
   /// Newly-opened cross-origin documents are loaded in a new browsing
   /// context group. Same-origin documents, and cross-origin documents not
   /// opened from this one, are unaffected.
-  NoopenerAllowPopups
+  NoOpenerAllowPopups
 }
 
 /// Encode as the `Cross-Origin-Opener-Policy` header value.
@@ -31,6 +31,6 @@ pub fn to_string(value: CrossOriginOpenerPolicy) -> String {
     UnsafeNone -> "unsafe-none"
     SameOrigin -> "same-origin"
     SameOriginAllowPopups -> "same-origin-allow-popups"
-    NoopenerAllowPopups -> "noopener-allow-popups"
+    NoOpenerAllowPopups -> "noopener-allow-popups"
   }
 }

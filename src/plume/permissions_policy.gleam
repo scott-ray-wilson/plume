@@ -55,7 +55,7 @@ pub type Directive {
   CapturedSurfaceControl(Allowlist)
   /// Controls whether high-entropy Client Hint values are returned by
   /// `NavigatorUAData.getHighEntropyValues()`.
-  ChUaHighEntropyValues(Allowlist)
+  ClientHintUserAgentHighEntropyValues(Allowlist)
   /// Controls access to the Compute Pressure API.
   ComputePressure(Allowlist)
   /// Controls whether the document can be treated as cross-origin isolated.
@@ -106,9 +106,9 @@ pub type Directive {
   /// Controls the ability to redeem Private State Tokens.
   PrivateStateTokenRedemption(Allowlist)
   /// Controls access to the Web Authentication API's `create()` method.
-  PublickeyCredentialsCreate(Allowlist)
+  PublicKeyCredentialsCreate(Allowlist)
   /// Controls access to the Web Authentication API's `get()` method.
-  PublickeyCredentialsGet(Allowlist)
+  PublicKeyCredentialsGet(Allowlist)
   /// Controls access to the Screen Wake Lock API.
   ScreenWakeLock(Allowlist)
   /// Controls access to the Web Serial API.
@@ -177,7 +177,7 @@ fn directive_to_string(directive: Directive) -> String {
     Camera(allowlist) -> render_directive("camera", allowlist)
     CapturedSurfaceControl(allowlist) ->
       render_directive("captured-surface-control", allowlist)
-    ChUaHighEntropyValues(allowlist) ->
+    ClientHintUserAgentHighEntropyValues(allowlist) ->
       render_directive("ch-ua-high-entropy-values", allowlist)
     ComputePressure(allowlist) ->
       render_directive("compute-pressure", allowlist)
@@ -212,9 +212,9 @@ fn directive_to_string(directive: Directive) -> String {
       render_directive("private-state-token-issuance", allowlist)
     PrivateStateTokenRedemption(allowlist) ->
       render_directive("private-state-token-redemption", allowlist)
-    PublickeyCredentialsCreate(allowlist) ->
+    PublicKeyCredentialsCreate(allowlist) ->
       render_directive("publickey-credentials-create", allowlist)
-    PublickeyCredentialsGet(allowlist) ->
+    PublicKeyCredentialsGet(allowlist) ->
       render_directive("publickey-credentials-get", allowlist)
     ScreenWakeLock(allowlist) -> render_directive("screen-wake-lock", allowlist)
     Serial(allowlist) -> render_directive("serial", allowlist)
