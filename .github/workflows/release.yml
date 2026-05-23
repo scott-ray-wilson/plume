@@ -32,7 +32,7 @@ jobs:
         run: gleam test
 
       - name: Publish to Hex
-        run: echo "I am not using semantic versioning" | gleam publish --yes
+        run: gleam publish --yes
         env:
           HEXPM_API_KEY: ${{ secrets.HEXPM_API_KEY }}
 
