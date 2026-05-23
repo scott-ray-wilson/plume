@@ -38,7 +38,7 @@ pub fn directive_to_header_test() {
     )
     == "captured-surface-control=(self)"
   assert pp.to_string(
-      pp.Policy([pp.ClientHintUserAgentHighEntropyValues(pp.Origins([pp.Self]))]),
+      pp.Policy([pp.ChUaHighEntropyValues(pp.Origins([pp.Self]))]),
     )
     == "ch-ua-high-entropy-values=(self)"
   assert pp.to_string(pp.Policy([pp.ComputePressure(pp.Origins([pp.Self]))]))

@@ -55,7 +55,7 @@ pub type Directive {
   CapturedSurfaceControl(Allowlist)
   /// Controls whether high-entropy Client Hint values are returned by
   /// `NavigatorUAData.getHighEntropyValues()`.
-  ClientHintUserAgentHighEntropyValues(Allowlist)
+  ChUaHighEntropyValues(Allowlist)
   /// Controls access to the Compute Pressure API.
   ComputePressure(Allowlist)
   /// Controls whether the document can be treated as cross-origin isolated.
@@ -177,7 +177,7 @@ fn directive_to_string(directive: Directive) -> String {
     Camera(allowlist) -> render_directive("camera", allowlist)
     CapturedSurfaceControl(allowlist) ->
       render_directive("captured-surface-control", allowlist)
-    ClientHintUserAgentHighEntropyValues(allowlist) ->
+    ChUaHighEntropyValues(allowlist) ->
       render_directive("ch-ua-high-entropy-values", allowlist)
     ComputePressure(allowlist) ->
       render_directive("compute-pressure", allowlist)
