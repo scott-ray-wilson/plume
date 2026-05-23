@@ -17,7 +17,7 @@ other compatible server ([examples below](#integrations)).
 ## Install
 
 ```sh
-gleam add plume@0.1
+gleam add plume@1
 ```
 
 ## Usage
