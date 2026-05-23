@@ -9,16 +9,6 @@ pub fn main() -> Nil {
   gleeunit.main()
 }
 
-pub fn plume_middleware_test() {
-  let resp = {
-    use <- plume.middleware(plume.default())
-    response.new(200)
-  }
-
-  assert response.get_header(resp, "x-content-type-options") == Ok("nosniff")
-  assert response.get_header(resp, "x-frame-options") == Ok("SAMEORIGIN")
-}
-
 pub fn plume_new_test() {
   let config = plume.new()
 

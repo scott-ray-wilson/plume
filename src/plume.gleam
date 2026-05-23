@@ -5,21 +5,21 @@
 //// any other compatible server.
 ////
 //// Build a `Config` describing which headers to set on outgoing responses,
-//// then apply it. `default` ships a reasonable starter policy; `new`
-//// starts with no headers set.
-////
-//// As `use` middleware:
-////
-//// ```gleam
-//// use <- plume.middleware(plume.default())
-//// response.new(200)
-//// ```
-////
-//// Or directly on a response:
+//// then apply it with `set_headers`. `default` ships a reasonable starter
+//// policy; `new` starts with no headers set.
 ////
 //// ```gleam
 //// response.new(200)
 //// |> plume.set_headers(plume.default())
+//// ```
+////
+//// Headers set after `set_headers` take precedence, so you can override
+//// any individual value:
+////
+//// ```gleam
+//// response.new(200)
+//// |> plume.set_headers(plume.default())
+//// |> response.set_header("referrer-policy", "strict-origin")
 //// ```
 
 import gleam/http/response.{type Response}
@@ -126,15 +126,6 @@ pub fn default() -> Config {
     strict_transport_security: Some(sts.IncludeSubDomains(31_536_000)),
     xss_protection: Some(xp.Disabled),
   )
-}
-
-/// Run `handler` and set the headers from `config` on the resulting response.
-///
-pub fn middleware(
-  config: Config,
-  handler: fn() -> Response(body),
-) -> Response(body) {
-  handler() |> set_headers(config)
 }
 
 /// Set the headers from `config` on an existing response.

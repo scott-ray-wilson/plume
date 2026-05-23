@@ -22,20 +22,6 @@ gleam add plume@1
 
 ## Usage
 
-As `use` middleware:
-
-```gleam
-import gleam/http/response.{type Response}
-import plume
-
-pub fn handler() -> Response(String) {
-  use <- plume.middleware(plume.default())
-  response.new(200)
-}
-```
-
-Or directly on a response:
-
 ```gleam
 import gleam/http/response.{type Response}
 import plume
@@ -43,6 +29,15 @@ import plume
 pub fn handler() -> Response(String) {
   response.new(200) |> plume.set_headers(plume.default())
 }
+```
+
+Headers set after `set_headers` take precedence, so you can override any
+individual value by piping into `response.set_header`:
+
+```gleam
+response.new(200)
+|> plume.set_headers(plume.default())
+|> response.set_header("referrer-policy", "strict-origin")
 ```
 
 `plume.default()` ships a starter CSP, `nosniff`, `SameOrigin` frame options,
@@ -77,8 +72,7 @@ import plume
 import wisp.{type Request, type Response}
 
 pub fn handle_request(_req: Request) -> Response {
-  use <- plume.middleware(plume.default())
-  wisp.ok()
+  wisp.ok() |> plume.set_headers(plume.default())
 }
 ```
 
@@ -93,9 +87,9 @@ import mist.{type Connection, type ResponseData}
 import plume
 
 pub fn handle_request(_req: Request(Connection)) -> Response(ResponseData) {
-  use <- plume.middleware(plume.default())
   response.new(200)
   |> response.set_body(mist.Bytes(bytes_tree.from_string("Hello!")))
+  |> plume.set_headers(plume.default())
 }
 
 pub fn main() {
