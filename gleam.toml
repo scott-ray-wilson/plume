@@ -1,5 +1,5 @@
 name = "plume"
-version = "1.0.0"
+version = "1.0.1"
 gleam = ">= 1.16.0"
 description = "Sensible HTTP security headers for Gleam web servers, inspired by helmet."
 licences = ["MIT"]
